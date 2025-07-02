@@ -90,7 +90,7 @@ const server = http.createServer((req, res) => {
         res.writeHead(301, { Location: "/new-page.html" });
         res.end();
         break;
-      case "www-page.html":
+      case "home-page.html":
         res.writeHead(301, { Location: "/" });
         res.end();
         break;
