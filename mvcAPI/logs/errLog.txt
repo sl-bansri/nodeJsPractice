@@ -32,3 +32,6 @@
 20250704	03:07:40	6ee85e5d-ee2d-429f-8d1e-ebe2239633ef	SyntaxError => Expected ',' or '}' after property value in JSON at position 13 (line 3 column 3)
 20250704	03:07:51	a2eed3d2-558f-4047-923e-0d9fa0904409	Error => ENOENT: no such file or directory, open 'E:\NodeJs-Practice\nodeJsPractice\Expressroute\data\1.json'
 20250704	03:07:95	06b2ae51-bfb4-4d51-9209-789464455f74	Error => ENOENT: no such file or directory, open 'E:\NodeJs-Practice\nodeJsPractice\Expressroute\data\1.json'
+20250706	22:07:17	ff2d206f-9347-402c-9aed-b5560de84d7f	TypeError => Cannot read properties of undefined (reading 'id')
+20250706	22:07:36	38189321-30eb-415b-90b5-b6836a4eb6de	TypeError => Cannot read properties of undefined (reading 'id')
+20250706	22:07:03	ae486019-5fbe-4b87-8664-26a65dddac27	TypeError => Cannot read properties of undefined (reading 'id')
