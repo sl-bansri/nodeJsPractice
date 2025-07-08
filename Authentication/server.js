@@ -4,6 +4,8 @@ const cors = require("cors");
 const corsOption = require("./config/corsOption");
 const { logger } = require("./middleware/logEvents");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const verifyJWT = require("./middleware/verifyJWT");
 const errorHandler = require("./middleware/errorHandler");
 const { error } = require("console");
 const PORT = process.env.PORT || 3500;
@@ -24,20 +26,27 @@ app.use(express.urlencoded({ extended: false }));
 //built in middleware for json
 app.use(express.json());
 
+//middleware for cookies
+app.use(cookieParser());
+
 // serve static file
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 //routes
-const employeeRouterone = require("./routes/api/employeesone");
-app.use("/employeesone", employeeRouterone);
 app.use("/", require("./routes/root"));
 app.use("/register", require("./routes/register"));
 app.use("/auth", require("./routes/auth"));
+app.use("/refresh", require("./routes/refresh"));
+app.use("/logout", require("./routes/logout"));
+
+app.use(verifyJWT);
+
+const employeeRouterone = require("./routes/api/employeesone");
+app.use("/employeesone", employeeRouterone);
 
 app.all("{*any}", (req, res) => {
   res.status(404);
   if (req.accepts("html")) {
-    auth;
     res.sendFile(path.join(__dirname, "views", "404.html"));
   } else if (req.accepts("json")) {
     res.json({ error: "404 Not Found" });
