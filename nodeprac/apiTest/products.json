@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "jfja",
+    "description": "lll",
+    "price": 500,
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "dyty",
+    "description": "llfhyl",
+    "price": 500,
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "uiui",
+    "description": "llssysyfhyl",
+    "price": 500,
+    "inStock": true
+  }
+]
