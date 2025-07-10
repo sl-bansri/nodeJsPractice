@@ -65,11 +65,12 @@ const handleLogin = async (req, res) => {
     );
 
     // this is for saving refresh tokens
-    const otherUser = userDB.users.find(
+    const otherUser = userDB.users.filter(
       (person) => person.username !== foundUser.username
     );
     const currentUser = { ...foundUser, refreshToken };
     userDB.setUsers([...otherUser, currentUser]);
+
     await fsPromises.writeFile(
       path.join(__dirname, "..", "model", "user.json"),
       JSON.stringify(userDB.users)
