@@ -1,22 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const data = {};
-data.employees = require("../../model/employees.json");
+
 // const verifyJWT = require("../../middleware/verifyJWT");
 
-const employeesController = require("../../controllers/employeesControllers");
+const {
+  getAllEmployee,
+  createNewEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getEmployee,
+} = require("../../controllers/employeesControllers");
+const verifyRoles = require("../../middleware/verifyRoles");
+const ROLES_LIST = require("../../config/roles_list");
 
-router
-  .route("/")
-  // .get(verifyJWT, employeesController.getAllEmployee) // this is the examplye of one way to use jwt another one is in server.js
-  .get(employeesController.getAllEmployee)
+// .get(verifyJWT, employeesController.getAllEmployee) // this is the examplye of one way to use jwt another one is in server.js
+router.get("/", getAllEmployee);
+router.post(
+  "/",
+  verifyRoles([ROLES_LIST.Admin, ROLES_LIST.Editor]),
+  createNewEmployee
+);
 
-  .post(employeesController.createNewEmployee)
+router.put(
+  "/",
+  verifyRoles([ROLES_LIST.Admin, ROLES_LIST.Editor]),
+  updateEmployee
+);
 
-  .put(employeesController.updateEmployee)
+router.delete("/", verifyRoles([ROLES_LIST.Admin]), deleteEmployee);
 
-  .delete(employeesController.deleteEmployee);
-
-router.route("/:id").get(employeesController.getEmployee);
+router.get("/:id", getEmployee);
 
 module.exports = router;
