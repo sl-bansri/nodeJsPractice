@@ -45,10 +45,10 @@ const LogEvents = async (message, logName) => {
   }
 };
 const logger = (req, res, next) => {
-  LogEvents(
-    `${req.method}\t ${req.headers.origin} \t${req.url} `,
-    "/reqLog.txt"
-  );
+  // LogEvents(
+  //   `${req.method}\t ${req.headers.origin} \t${req.url} `,
+  //   "/reqLog.txt"
+  // );
   console.log(`${req.method} => ${req.url}`);
   next();
 };
