@@ -1,8 +1,8 @@
-const itemData = require("../models/ItemData");
+const { ItemData } = require("../models/ItemData");
 
 const getAllItems = async (req, res) => {
-  console.log(itemData, "...... itemData");
-  const item = await itemData.find();
+  console.log(ItemData, "...... ItemData");
+  const item = await ItemData.find();
   if (item.length == 0) {
     return res.json({ message: "list is empty create your item first" });
   }
@@ -22,8 +22,8 @@ const createNewItem = async (req, res) => {
   }
 
   try {
-    console.log(itemData);
-    const result = await itemData.create({
+    console.log(ItemData);
+    const result = await ItemData.create({
       Itemname: req.body.Itemname,
       description: req.body.description,
       price: req.body.price,
@@ -41,7 +41,7 @@ const updateItem = async (req, res) => {
     return res.status(400).json({ message: "ID parameter is required." });
   }
 
-  const item = await itemData.findOne({ _id: req.body.id }).exec();
+  const item = await ItemData.findOne({ _id: req.body.id }).exec();
   console.log("items", item);
   if (!item) {
     return res
@@ -62,23 +62,24 @@ const deleteItem = async (req, res) => {
   if (!req?.body?.id) {
     return res.sendStatus(400).json({ message: "Item Id is required" });
   }
-  const items = await itemData.findOne({ _id: req.body.id }).exec();
+  const items = await ItemData.findOne({ _id: req.body.id }).exec();
 
   if (!items) {
     return res
       .status(400)
       .json({ message: `item ID ${req.body.id} not found` });
   }
-  const result = await itemData.deleteOne({ _id: req.body.id });
+  const result = await ItemData.deleteOne({ _id: req.body.id });
   res.json(result);
   console.log(items);
 };
 
 const getItemId = async (req, res) => {
+  console.log("hiii=>>>", req?.params?.id);
   if (!req?.params?.id) {
     return res.sendStatus(400).json({ message: "Item Id is required" });
   }
-  const items = await itemData.findOne({ _id: req.params.id });
+  const items = await ItemData.findOne({ _id: req.params.id });
   if (!items) {
     return res
       .status(400)
