@@ -14,9 +14,22 @@ const {
   getOrderItems,
 } = require("../controllers/OrderController");
 
+const {
+  getAggreItems,
+  postAggreItem,
+  updateAggreSummary,
+} = require("../controllers/aggreController");
+
+// router.post("/update_data", updateAggreSummary);
+router.get("/update_data", updateAggreSummary);
+
+router.get("/aggre", getAggreItems);
+router.post("/aggre", postAggreItem);
 router.post("/orders", PostorderItems);
 router.get("/orders", getOrderItems);
-router.get("/orders/:userId", getOrderData);
+// router.get("/orders/:userId", getOrderData);
+router.get("/orderData/", getOrderData);
+
 router.get("/", getAllItems);
 router.post("/", createNewItem);
 router.put("/", updateItem);
