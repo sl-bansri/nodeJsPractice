@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/items", require("./routes/item"));
+app.use("/operator", require("./routes/operator"));
 
 mongoose.connection.once("open", () => {
   console.log("connected to database");

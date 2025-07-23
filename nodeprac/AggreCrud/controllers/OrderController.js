@@ -10,7 +10,7 @@ const getOrderItems = async (req, res) => {
   res.json(item);
 };
 
-const PostorderItems = async (req, res) => {
+const postorderItems = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
 
@@ -138,4 +138,4 @@ const getOrderData = async (req, res) => {
   }
 };
 
-module.exports = { getOrderData, PostorderItems, getOrderItems };
+module.exports = { getOrderData, postorderItems, getOrderItems };

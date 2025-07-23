@@ -32,21 +32,58 @@ const postAggreItem = async (req, res) => {
 const updateAggreSummary = async (req, res) => {
   console.log(AggreData, "AggreData");
   try {
+    // const resulttt = await AggreData.find();
+    // console.log("resulttt=>>", resulttt);
     const result = await AggreData.aggregate([
+      // example of search , limit , skip
       // {
-      // $search: {
-      //   index: "default",
-      //   text: {
-      //     query: "Laptop",
-      //     path: "$product",
+      //   $search: {
+      //     index: "default",
+      //     text: {
+      //       query: "Laptop",
+      //       path: "product",
       //     },
       //   },
       // },
+      // { $skip: 1 },
+      // { $limit: 1 },
+      // example of group and merge
+      // {
+      //   $group: {
+      //     _id: "$product",
+      //     totalSales: { $sum: "$price" },
+      //     totalQuantitySold: { $sum: "$quantity" },
+      //   },
+      // },
+      // {
+      //   $merge: {
+      //     into: "Product_summary",
+      //     on: "_id",
+      //     whenMatched: "merge",
+      //     whenNotMatched: "insert",
+      //   },
+      // },
 
-      { $skip: 1 },
-      { $limit: 1 },
+      {
+        $facet: {
+          GroupByCategory: [
+            { $unwind: "$product" },
+            { $group: { _id: "$product", count: { $sum: 1 } } },
+          ],
+          averagePriceByCategory: [
+            { $unwind: "$product" },
+            {
+              $group: {
+                _id: "$product",
+                avgPrice: { $avg: "$price" },
+              },
+            },
+          ],
+        },
+      },
     ]);
-    console.log("res", result);
+
+    console.log("res=>>>>", result);
 
     if (res) {
       res.status(200).json({ message: `${result}` });
