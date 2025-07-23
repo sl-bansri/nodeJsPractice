@@ -28,8 +28,8 @@ router.get("/aggre", getAggreItems);
 router.post("/aggre", postAggreItem);
 router.post("/orders", postorderItems);
 router.get("/orders", getOrderItems);
-// router.get("/orders/:userId", getOrderData);
-router.get("/orderData/", getOrderData);
+router.get("/orders/:userId", getOrderData);
+// router.get("/orderData/", getOrderData);
 
 // crud operations
 router.get("/", getAllItems);

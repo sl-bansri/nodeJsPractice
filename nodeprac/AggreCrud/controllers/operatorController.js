@@ -15,17 +15,20 @@ const postOperatorItem = async (req, res) => {
     !req?.body?.product ||
     !req?.body?.price ||
     !req?.body?.fees ||
+    !req?.body?.description ||
+    !req?.body?.favorites ||
     !req?.body?.quantity
   ) {
     return res.status(400).json({ message: "product are required" });
   }
 
   try {
-    console.log(OperatorData);
     const result = await OperatorData.create({
       product: req.body.product,
       price: req.body.price,
       fees: req.body.fees,
+      description: req.body.description,
+      favorites: req.body.favorites,
       quantity: req.body.quantity,
     });
 
@@ -36,7 +39,6 @@ const postOperatorItem = async (req, res) => {
 };
 
 const updateOperatorResult = async (req, res) => {
-  console.log(OperatorData, "OperatorData");
   try {
     const result = await OperatorData.aggregate([
       // $add operator]
@@ -66,12 +68,46 @@ const updateOperatorResult = async (req, res) => {
       //       _id: 1,
       //     },
       //   },
+      // $arrayElemAt
+      // {
+      //   $project: {
+      //     name: 1,
+      //     first: { $arrayElemAt: ["$favorites", 0] },
+      //     last: { $arrayElemAt: ["$favorites", -1] },
+      //   },
+      // },
+      //  $ cmp
+      // {
+      //   $project: {
+      //     product: 1,
+      //     quantity: 1,
+      //     cmpTo250: { $cmp: ["$quantity", 2] },
+      //     _id: 0,
+      //   },
+      // },
+      // $concat
+      // {
+      //   $project: {
+      //     productDescription: { $concat: ["$product", " - ", "$description"] },
+      //   },
+      // },
+      // $cond => condition using if , then , else
+      // {
+      //   $project: {
+      //     product: 1,
+      //     discount: {
+      //       $cond: { if: { $gte: ["$quantity", 3] }, then: 30, else: 20 },
+      //     },
+      //   },
+      // },
+      // $count
 
       {
-        $project: {
-          name: 1,
-          first: { $arrayElemAt: ["$favorites", 0] },
-          last: { $arrayElemAt: ["$favorites", -1] },
+        $group: {
+          _id: "$product",
+          countNumberOfDocumentsForProduct: {
+            $count: {},
+          },
         },
       },
     ]);
