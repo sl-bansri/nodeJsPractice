@@ -12,6 +12,10 @@ const operatorSchema = new Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,
@@ -34,5 +38,25 @@ const operatorSchema = new Schema({
   },
 });
 
+const dateSchema = new Schema({
+  item: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+});
+
 const OperatorData = mongoose.model("operatorData", operatorSchema);
-module.exports = OperatorData;
+const DateOperator = mongoose.model("dateOp", dateSchema);
+module.exports = { OperatorData, DateOperator };

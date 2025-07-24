@@ -35,99 +35,103 @@ const postorderItems = async (req, res) => {
 
 const getOrderData = async (req, res) => {
   try {
-    // const userId = Number(req.params.userId);
-    // console.log(userId);
+    const userId = Number(req.params.userId);
+    console.log(userId);
 
-    // const pipeline = [
-    //   {
-    //     $match: {
-    //       userId: userId,
-    //     },
-    //   },
-    //   // {
-    //   //   $lookup: {
-    //   //     from: "items",
-    //   //     localField: "productId",
-    //   //     foreignField: "_id",
-    //   //     as: "itemDetails",
-    //   //   },
-    //   // },
-    //   // {
-    //   //   $lookup: {
-    //   //     from: "orders",
-    //   //     localField: "userId",
-    //   //     foreignField: "productId",
-    //   //     as: "productDetails",
-    //   //   },
-    //   // },
-    //   // {
-    //   //   $addFields: {
-    //   //     OrdeCount: {
-    //   //       $size: "$productDetails",
-    //   //     },
-    //   //     itemCount: {
-    //   //       $size: "$itemDetails",
-    //   //     },
-    //   //     isOrdered: {
-    //   //       $cond: {
-    //   //         if: { $in: ["$productId", "$itemDetails._id"] },
-    //   //         then: true,
-    //   //         else: false,
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // },
-    //   // {
-    //   //   $project: {
-    //   //     _id: 0,
-    //   //     price: "$itemDetails.price",
-    //   //     itemname: "$itemDetails.Itemname",
-    //   //     orderId: "$_id",
-    //   //     quantity: 1,
-    //   //     orderDate: 1,
-    //   //     itemCount: 1,
-    //   //     // totalAmount: 1,
-    //   //     itemTotal: 1,
-    //   //     OrdeCount: 1,
-    //   //   },
-    //   // },
-    // ];
-
-    // nested pipeline
     const pipeline = [
+      {
+        $match: {
+          userId: userId,
+        },
+      },
+
       {
         $lookup: {
           from: "items",
-          let: { productId: "$productId" },
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$_id", "$$productId"] },
-              },
-            },
-            {
-              $project: {
-                Itemname: 1,
-                price: 1,
-                _id: 0,
-              },
-            },
-          ],
+          localField: "productId",
+          foreignField: "_id",
           as: "itemDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "userId",
+          foreignField: "productId",
+          as: "productDetails",
+        },
+      },
+
+      {
+        $addFields: {
+          OrdeCount: {
+            $size: "$productDetails",
+          },
+          itemCount: {
+            $size: "$itemDetails",
+          },
+
+          isOrdered: {
+            $cond: {
+              if: { $in: ["$productId", "$itemDetails._id"] },
+              then: true,
+              else: false,
+            },
+          },
         },
       },
 
       {
         $project: {
           _id: 0,
-          userId: 1,
+          price: "$itemDetails.price",
+          itemname: "$itemDetails.Itemname",
+          orderId: "$_id",
           quantity: 1,
           orderDate: 1,
-          itemName: "$itemDetails.Itemname",
-          itemPrice: "$itemDetails.price",
+          itemCount: 1,
+          totalAmount: 1,
+          itemTotal: 1,
+          OrdeCount: 1,
         },
       },
     ];
+
+    // nested pipeline
+    // const pipeline = [
+    //   {
+    //     $lookup: {
+    //       from: "items",
+    //       let: { productId: "$productId" },
+    //       pipeline: [
+    //         {
+    //           $match: {
+    //             $expr: { $eq: ["$_id", "$$productId"] },
+    //           },
+    //         },
+    //         {
+    //           $project: {
+    //             Itemname: 1,
+    //             price: 1,
+    //             _id: 0,
+    //           },
+    //         },
+    //       ],
+    //       as: "itemDetails",
+    //     },
+    //   },
+
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       userId: 1,
+    //       quantity: 1,
+    //       orderDate: 1,
+    //       itemName: "$itemDetails.Itemname",
+    //       itemPrice: "$itemDetails.price",
+    //     },
+    //   },
+    // ];
 
     const userOrders = await Order.aggregate(pipeline);
     console.log(userOrders);
