@@ -112,8 +112,6 @@ const updateOperatorResult = async (req, res) => {
       },
     ]);
 
-    console.log("res=>>>>", result);
-
     if (res) {
       res.status(200).json(result);
     }

@@ -47,12 +47,24 @@ const dateSchema = new Schema({
     type: Date,
     required: true,
   },
+  purchased: {
+    type: Date,
+    required: true,
+  },
+  delivered: {
+    type: Date,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
   },
   quantity: {
     type: Number,
+    required: true,
+  },
+  filterNum: {
+    type: Array,
     required: true,
   },
 });

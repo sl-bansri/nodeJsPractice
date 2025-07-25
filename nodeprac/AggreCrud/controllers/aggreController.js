@@ -16,7 +16,6 @@ const postAggreItem = async (req, res) => {
   }
 
   try {
-    console.log(AggreData);
     const result = await AggreData.create({
       product: req.body.product,
       price: req.body.price,
@@ -30,10 +29,9 @@ const postAggreItem = async (req, res) => {
 };
 
 const updateAggreSummary = async (req, res) => {
-  console.log(AggreData, "AggreData");
   try {
     // const resulttt = await AggreData.find();
-    // console.log("resulttt=>>", resulttt);
+
     const result = await AggreData.aggregate([
       // example of search , limit , skip
       // {
@@ -82,8 +80,6 @@ const updateAggreSummary = async (req, res) => {
         },
       },
     ]);
-
-    console.log("res=>>>>", result);
 
     if (res) {
       res.status(200).json({ message: `${result}` });

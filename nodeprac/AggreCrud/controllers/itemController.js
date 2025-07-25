@@ -1,12 +1,11 @@
 const { ItemData } = require("../models/ItemData");
 
 const getAllItems = async (req, res) => {
-  console.log(ItemData, "...... ItemData");
   const item = await ItemData.find();
   if (item.length == 0) {
     return res.json({ message: "list is empty create your item first" });
   }
-  // console.log(item.length, "item");
+
   if (!item) return res.status(204).json({ message: "No item found." });
   res.json(item);
 };
@@ -22,7 +21,6 @@ const createNewItem = async (req, res) => {
   }
 
   try {
-    console.log(ItemData);
     const result = await ItemData.create({
       Itemname: req.body.Itemname,
       description: req.body.description,
@@ -42,7 +40,7 @@ const updateItem = async (req, res) => {
   }
 
   const item = await ItemData.findOne({ _id: req.body.id }).exec();
-  console.log("items", item);
+
   if (!item) {
     return res
       .status(204)
@@ -71,11 +69,9 @@ const deleteItem = async (req, res) => {
   }
   const result = await ItemData.deleteOne({ _id: req.body.id });
   res.json(result);
-  console.log(items);
 };
 
 const getItemId = async (req, res) => {
-  console.log("hiii=>>>", req?.params?.id);
   if (!req?.params?.id) {
     return res.sendStatus(400).json({ message: "Item Id is required" });
   }
