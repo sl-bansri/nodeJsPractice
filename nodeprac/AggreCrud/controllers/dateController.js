@@ -14,7 +14,10 @@ const postOperatorDate = async (req, res) => {
   if (
     !req?.body?.item ||
     !req?.body?.price ||
+    !req?.body?.purchased ||
+    !req?.body?.delivered ||
     !req?.body?.date ||
+    !req?.body?.filterNum ||
     !req?.body?.quantity
   ) {
     return res.status(400).json({ message: "product are required" });
@@ -24,7 +27,10 @@ const postOperatorDate = async (req, res) => {
     const result = await DateOperator.create({
       item: req.body.item,
       price: req.body.price,
+      purchased: req.body.purchased,
+      delivered: req.body.delivered,
       date: req.body.date,
+      filterNum: req.body.filterNum,
       quantity: req.body.quantity,
     });
 
@@ -75,9 +81,7 @@ const dateOperatorResult = async (req, res) => {
       //       },
       //     },
       //   },
-
       // dateTrunc
-
       //   {
       //     $project: {
       //       _id: 1,
@@ -93,7 +97,6 @@ const dateOperatorResult = async (req, res) => {
       //       },
       //     },
       //   },
-
       //   {
       //     $project: {
       //       year: { $year: "$date" },
@@ -108,23 +111,131 @@ const dateOperatorResult = async (req, res) => {
       //       week: { $week: "$date" },
       //     },
       //   },
+      // {
+      //   $project: {
+      //     _id: 1,
+      //     originalDate: "$date",
+      //     newDate: {
+      //       $dateAdd: {
+      //         startDate: "$date",
+      //         unit: "day",
+      //         amount: 7,
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     orderId: 1,
+      //     startDate: "$purchased",
+      //     endDate: "$delivered",
+      //     deliveryTimeInDays: {
+      //       $dateDiff: {
+      //         startDate: "$purchased",
+      //         endDate: "$delivered",
+      //         unit: "day",
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     _id: 0,
+      //     filteredNumbers: {
+      //       $filter: {
+      //         input: "$filterNum",
+      //         as: "num",
+      //         cond: { $gt: ["$$num", 7] },
+      //       },
+      //     },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     filteredNumbers: {
+      //       $filter: {
+      //         input: "$filterNum",
+      //         as: "num",
+      //         cond: { $gt: ["$$num", 2] },
+      //       },
+      //     },
+      //     incrementedNumbers: {
+      //       $map: {
+      //         input: "$filterNum",
+      //         as: "num",
+      //         in: { $add: ["$$num", 1] },
+      //       },
+      //     },
+      //   },
+      // },
+
+      // {
+      //   $group: {
+      //     _id: "$item",
+      //     minQuantity: { $min: "$quantity" },
+      //     maxQuantity: { $max: "$quantity" },
+      //     totalQuantity: { $sum: "$quantity" },
+      //   },
+      // },
+
+      // {
+      //   $setWindowFields: {
+      //     partitionBy: "$item",
+      //     sortBy: { orderDate: 1 },
+      //     output: {
+      //       quantitiesForItems: {
+      //         $push: "$quantity",
+      //         window: {
+      //           documents: ["unbounded", "current"],
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
+
+      // {
+      //   $group: {
+      //     _id: "$item",
+      //     filterArr: { $push: "$quantity" },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     description: 1,
+      //     results: {
+      //       $reduce: {
+      //         input: "$filterArr",
+      //         initialValue: 1,
+      //         in: { $sum: ["$$value", "$$this"] },
+      //       },
+      //     },
+      //   },
+      // },
 
       {
         $project: {
-          _id: 1,
-          originalDate: "$date",
-          newDate: {
-            $dateAdd: {
-              startDate: "$date",
-              unit: "day",
-              amount: 7,
+          item: {
+            $replaceOne: {
+              input: "$item",
+              find: "abc",
+              replacement: "mno",
+            },
+          },
+        },
+      },
+
+      {
+        $project: {
+          item: {
+            $replaceAll: {
+              input: "$item",
+              find: "xyz",
+              replacement: "pqr",
             },
           },
         },
       },
     ]);
-
-    console.log("res=>>>>", result);
 
     if (res) {
       res.status(200).json(result);

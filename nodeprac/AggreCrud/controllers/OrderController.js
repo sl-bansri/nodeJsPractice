@@ -36,7 +36,6 @@ const postorderItems = async (req, res) => {
 const getOrderData = async (req, res) => {
   try {
     const userId = Number(req.params.userId);
-    console.log(userId);
 
     const pipeline = [
       {
@@ -95,6 +94,17 @@ const getOrderData = async (req, res) => {
           OrdeCount: 1,
         },
       },
+      // {
+      //   $setWindowFields: {
+      //     partitionBy: "$userId",
+      //     sortBy: { quantity: -1 },
+      //     output: {
+      //       documentNumberForState: {
+      //         $documentNumber: {},
+      //       },
+      //     },
+      //   },
+      // },
     ];
 
     // nested pipeline
@@ -134,7 +144,7 @@ const getOrderData = async (req, res) => {
     // ];
 
     const userOrders = await Order.aggregate(pipeline);
-    console.log(userOrders);
+
     res.json(userOrders);
   } catch (error) {
     console.error("Error fetching user orders:", error);
