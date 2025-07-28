@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/customer", require("./routes/orderData"));
+app.use("/movie", require("./routes/movieRoute"));
 
 mongoose.connection.once("open", () => {
   app.listen(PORT, () => {
